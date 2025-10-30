@@ -27,6 +27,7 @@ export default function Header() {
                                     <li className={styles.liSubMenu}><Link href='/produtos'>Relatório</Link > </li>
                                 </ul>
                             </li>
+                            <li className={styles.liMenu}><Link href='/localidades'>Localidades</Link ></li>
                         </ul>
                     </nav>
                 }
@@ -42,6 +43,8 @@ export default function Header() {
                                 <li className={styles.liSubMenu}><Link href='/produtos'>Relatório</Link > </li>
                             </ul>
                         </li>
+                        <li className={styles.liMenu}><Link href='/localidades'>Localidades</Link ></li>
+
                     </ul>
                 </nav>
             </header>

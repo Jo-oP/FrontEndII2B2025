@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import Card from '@/components/Card';
 
@@ -18,10 +18,16 @@ export default function Produtos() {
     ];
 
     const [busca, setBusca] = useState('');
-    const [show, setShow] = useState(false);
+    // const [show, setShow] = useState(false);
+    const [produto, setProduto] = useState(null);
 
     const produtosFiltro = produtos.filter(prod => prod.nome.toLowerCase().includes(busca.toLowerCase()));
     console.log(produtosFiltro);
+
+    useEffect(() => {
+        alert('useEfect Executado');
+    },[])
+
 
     //  cria uma div modal (que ocupe toda a view port) que seja exibida ao clicar em uma linha da tabela produtos
     return (
@@ -35,14 +41,14 @@ export default function Produtos() {
                 placeholder='Digite sua busca'
             />
 
-            {show && <div className={styles.modal} onClick={()=>setShow(false)}>
+            {produto && <div className={styles.modal} onClick={() => setProduto(null)}>
                 <Card className={styles.cardProd}
-                nome = 'Nome do produto'
-                id = '20'
-                preco = 'R$200'
+                    nome={produto.nome}
+                    id={produto.id}
+                    preco={produto.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                 />
 
-                </div>}
+            </div>}
             <table className={styles.tbl}>
                 <thead>
                     <tr>
@@ -53,7 +59,7 @@ export default function Produtos() {
                 </thead>
                 <tbody>
                     {produtosFiltro.map(p => (
-                        <tr key={p.id} onClick={()=>setShow(true)}>
+                        <tr key={p.id} onClick={() => setProduto(p)}>
                             <td>{p.id}</td>
                             <td>{p.nome}</td>
                             <td>{p.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
