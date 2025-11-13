@@ -7,6 +7,9 @@ export default function Localidades() {
     const [paises, setPaises] = useState(null);
     const [status, setStatus] = useState('Carregando lista de países...');
     const [showTblPaises, setShowTblPaises] = useState(false);
+    const [ufs, setUfs] = useState([]);
+    const [ufSelecionado, setUfSelecionado] = useState('');
+    const [cidade, setCidade] = useState([]);
 
     const getPaises = async () => {
         try {
@@ -29,8 +32,45 @@ export default function Localidades() {
         // exibam id, nome do país e nome da região (subregião/região/nome) em uma tabela.
     }
 
+    const getUfs = async () => {
+        try {
+            const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome');
+            if (!response.ok) {
+                setStatus(response.statusText);
+                throw new Error(`Erro ao buscar dados: ${response.statusText}`)
+            }
+            console.log(response);
+            const dados = await response.json();
+            setUfs(dados);
+            console.log(dados);
+        } catch (e) {
+            setStatus(`Ocorreu um erro: ${e.message}`);
+            console.log(`Ocorreu um erro: ${e.message}`);
+        }
+        // exibam id, nome do país e nome da região (subregião/região/nome) em uma tabela.
+    }
+
+    const getCidade = async (uf) => {
+        try {
+            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+            if (!response.ok) {
+                setStatus(response.statusText);
+                throw new Error(`Erro ao buscar dados: ${response.statusText}`)
+            }
+            console.log(response);
+            const dados = await response.json();
+            setUfs(dados);
+            console.log(dados);
+        } catch (e) {
+            setStatus(`Ocorreu um erro: ${e.message}`);
+            console.log(`Ocorreu um erro: ${e.message}`);
+        }
+        // exibam id, nome do país e nome da região (subregião/região/nome) em uma tabela.
+    }
+
     useEffect(() => {
         getPaises();
+        getUfs();
     }, [])
 
     return (
@@ -60,6 +100,13 @@ export default function Localidades() {
                             </tbody>
                         </table>
                     }
+
+                    <select onClick={ev => getCidade(ev.target.value)}>
+                        { ufs.map(uf => (
+                            <option value="" key={uf.id}>{`${uf.nome} / ${uf.sigla}`}</option>
+                        ))}
+
+                    </select>
                 </div>
             }
         </div>
