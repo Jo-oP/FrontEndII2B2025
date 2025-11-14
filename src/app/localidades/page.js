@@ -9,7 +9,8 @@ export default function Localidades() {
     const [showTblPaises, setShowTblPaises] = useState(false);
     const [ufs, setUfs] = useState([]);
     const [ufSelecionado, setUfSelecionado] = useState('');
-    const [cidade, setCidade] = useState([]);
+    const [cidades, setCidades] = useState([]);
+    const [showTblCidades, setShowTblCidades] = useState(false);
 
     const getPaises = async () => {
         try {
@@ -52,6 +53,7 @@ export default function Localidades() {
 
     const getCidade = async (uf) => {
         try {
+            console.log('uf: ' + uf);
             const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
             if (!response.ok) {
                 setStatus(response.statusText);
@@ -59,7 +61,8 @@ export default function Localidades() {
             }
             console.log(response);
             const dados = await response.json();
-            setUfs(dados);
+            // setUfs(dados);
+            setCidades(dados)
             console.log(dados);
         } catch (e) {
             setStatus(`Ocorreu um erro: ${e.message}`);
@@ -79,7 +82,7 @@ export default function Localidades() {
             {status && <p>{status}</p>}
             {paises &&
                 <div>
-                    <button type="button" onClick={() => {setShowTblPaises(!showTblPaises)}}>{showTblPaises ? 'Ocultar Paises' : 'Mostrar Países'}</button>
+                    <button type="button" onClick={() => { setShowTblPaises(!showTblPaises) }}>{showTblPaises ? 'Ocultar Paises' : 'Mostrar Países'}</button>
                     {showTblPaises &&
                         <table className={styles.tbl}>
                             <thead>
@@ -101,12 +104,32 @@ export default function Localidades() {
                         </table>
                     }
 
-                    <select onClick={ev => getCidade(ev.target.value)}>
-                        { ufs.map(uf => (
-                            <option value="" key={uf.id}>{`${uf.nome} / ${uf.sigla}`}</option>
+                    <select onChange={ev => getCidade(ev.target.value)}>
+                        
+                        {ufs.map(uf => (
+                            <option value={uf.id} key={uf.id}>{`${uf.nome} / ${uf.sigla}`}</option>
                         ))}
 
                     </select>
+
+                    {cidades &&
+                        <table className={styles.tbl}>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>CIDADE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cidades.map(cidade => (
+                                    <tr key={cidade.id}>
+                                        <td>{cidade.id} </td>
+                                        <td>{cidade.nome}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    }
                 </div>
             }
         </div>
