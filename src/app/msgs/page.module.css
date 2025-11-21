@@ -1,0 +1,24 @@
+.tbl {
+    border-collapse: collapse;
+    margin: auto;
+    margin-top: 15px;
+}
+.tbl th, .tbl td {
+    border: 1px solid rgb(255, 255, 255);
+    padding: 5px;
+}
+
+.fs {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 400px;
+    margin: auto;
+    padding: 10px;
+}
+
+.form {
+    width: 400px;
+    margin: auto;
+    border: 1px solid rgb(165, 165, 165);
+}
